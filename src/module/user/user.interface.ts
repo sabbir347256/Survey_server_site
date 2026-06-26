@@ -1,12 +1,22 @@
+export enum Role {
+    ADMIN = "ADMIN",
+    EMPLOYEE = "EMPLOYEE",
+    VENDOR = "VENDOR",
+}
+
+export enum Status {
+    ACTIVE = "ACTIVE",
+    SUSPENDED = "SUSPENDED",
+}
 
 export interface IUser {
     name: string;
     email: string;
     password: string;
-    role: 'admin' | 'employee';
+    role: Role;
     balance: number;
     pendingBalance: number;
-    status: 'active' | 'suspended';
+    status: Status;
     createdAt: Date;
     updatedAt: Date;
 };

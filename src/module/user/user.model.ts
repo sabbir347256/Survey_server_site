@@ -1,14 +1,19 @@
-import mongoose, { Schema } from "mongoose";
-import { IUser } from "./user.interface";
+import mongoose, { Model, Schema } from "mongoose";
+import { IUser, Role, Status } from "./user.interface";
 
-const userModel: Schema = new Schema({
+const usermodel: Schema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ['admin', 'employee'], default: 'employee' },
+    role: { type: String, enum: Object.values(Role), default: Role.EMPLOYEE, required: true },
     balance: { type: Number, default: 0 },
     pendingBalance: { type: Number, default: 0 },
-    status: { type: String, enum: ['active', 'suspended'], default: 'active' }
-}, { timestamps: true });
+    status: { type: String, enum: Object.values(Status), default: Status.ACTIVE, required: true },
+},
+    {
+        timestamps: true,
+        versionKey: false
+    }
+);
 
-export default mongoose.model<IUser>('User', userModel);
+export const userModel : Model<IUser> = mongoose.model<IUser>('User', usermodel);

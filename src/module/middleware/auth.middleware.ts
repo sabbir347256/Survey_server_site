@@ -4,7 +4,7 @@ import httpStatus from 'http-status-codes';
 import { verifyToken } from "../utilitis/jwt";
 import envVars from "../../config/envars";
 import { JwtPayload } from "jsonwebtoken";
-import userModel from "../user/user.model";
+import { userModel } from "../user/user.model";
 
 export const checkAuth =
   (...restRole: string[]) =>
@@ -34,19 +34,6 @@ export const checkAuth =
         if (!isUser) {
           throw new appError(httpStatus.UNAUTHORIZED, "No user found!");
         }
-
-        // if (
-        //   isUser.isActive === IsActive.INACTIVE || isUser.isActive === IsActive.BLOCKED
-        // ) {
-        //   throw new appError(
-        //     httpStatus.FORBIDDEN,
-        //     "User is Blocked or Inactive!",
-        //   );
-        // }
-
-        //   if (isUser?.isDeleted) {
-        //     throw new appError(httpStatus.FORBIDDEN, "The user was deleted!");
-        //   }
 
         if (restRole.length && !restRole.includes(verifyUser.role)) {
           throw new appError(
