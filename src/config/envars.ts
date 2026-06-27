@@ -10,6 +10,7 @@ const envVars = {
   JWT_ACCESS_EXPIRES: process.env.JWT_ACCESS_EXPIRES as string,
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
   JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES as string,
+  PROVIDER_LOOTWALLS_KEY: process.env.PROVIDER_LOOTWALLS_KEY as string,
 };
 
 export = envVars;

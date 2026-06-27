@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import envVars from "../../config/envars";
 
 const getAllSurveys = async (req: Request, res: Response) => {
     try {
@@ -10,7 +11,7 @@ const getAllSurveys = async (req: Request, res: Response) => {
                 id: "lootwalls",
                 name: "Lootwalls",
                 description: "Share your opinions on simple topics and instantly stack points.",
-                url: `https://www.lootwalls.com/wall?apiKey=${process.env.PROVIDER_LOOTWALLS_KEY}&userId=${userId}`
+                url: `https://www.lootwalls.com/wall?apiKey=${envVars?.PROVIDER_LOOTWALLS_KEY}&userId=${userId}`
             },
             {
                 id: "offertoro",
