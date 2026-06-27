@@ -7,7 +7,7 @@ import envVars from "./config/envars";
 
 dotenv.config();
 
-const port = envVars.PORT || 5000;
+const port = envVars.PORT || 5001;
 const dbUrl = envVars.DB_URL;
 
 const httpServer = createServer(app);
