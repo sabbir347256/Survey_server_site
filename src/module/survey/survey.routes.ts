@@ -8,5 +8,6 @@ import { surveyController } from "./survey.controller";
 const router = Router();
 
 router.get('/get-all-surveys',checkAuth(Role.EMPLOYEE),geoBlockMiddleware, surveyController.getAllSurveys );
+router.post('/lootwalls', surveyController.handleLootwallsCallback);
 
 export const SurveyRouter = router;
