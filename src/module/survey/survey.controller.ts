@@ -3,8 +3,9 @@ import envVars from "../../config/envars";
 
 const getAllSurveys = async (req: Request, res: Response) => {
     try {
-        const user = req.user as { _id: string };
-        const userId = user._id;
+        const user = req.user as { userID: string };
+        console.log(user)
+        const userId = user.userID;
 
         const surveyProviders = [
             {
