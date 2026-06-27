@@ -1,33 +1,35 @@
-import { NextFunction, Request, Response } from "express";
-import { ipModel } from "../ipmanager/ip.model";
+// import { NextFunction, Request, Response } from "express";
+// import { ipModel } from "../ipmanager/ip.model";
 
-export const verifyPoolAccess = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const ipHeader = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
-        const rawIP = Array.isArray(ipHeader) ? ipHeader[0] : ipHeader;
-        const clientIP = rawIP.split(',')[0].trim();
+// export const verifyPoolAccess = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+//     try {
+//         const ipHeader = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+//         const rawIP = Array.isArray(ipHeader) ? ipHeader[0] : ipHeader;
 
-        if (!clientIP) {
-            res.status(400).json({
-                success: false,
-                message: "Security Alert: Unable to determine client IP address."
-            });
-            return;
-        }
+        
+//         const clientIP = rawIP.split(',')[0].trim();
 
-        const isApprovedIP = await ipModel.findOne({ incomingIP: clientIP, status: 'active' });
+//         if (!clientIP) {
+//             res.status(400).json({
+//                 success: false,
+//                 message: "Security Alert: Unable to determine client IP address."
+//             });
+//             return;
+//         }
 
-        if (!isApprovedIP) {
-            res.status(403).json({
-                success: false,
-                message: "Security Alert: You are not connected from an authorized VPS or Proxy!"
-            });
-            return;
-        }
+//         const isApprovedIP = await ipModel.findOne({ incomingIP: clientIP, status: 'active' });
 
-        next();
-    } catch (error) {
-        res.status(500).json({ error: "IP verification failed" });
-    }
-};
+//         if (!isApprovedIP) {
+//             res.status(403).json({
+//                 success: false,
+//                 message: "Security Alert: You are not connected from an authorized VPS or Proxy!"
+//             });
+//             return;
+//         }
+
+//         next();
+//     } catch (error) {
+//         res.status(500).json({ error: "IP verification failed" });
+//     }
+// };
 
