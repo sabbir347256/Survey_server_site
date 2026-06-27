@@ -7,15 +7,26 @@ import { utils } from "../utilitis/utils";
 import httpStatus from "http-status-codes";
 
 const credentialLogin = async (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate("user-local", async (err: any, user: any, info: any) => {
+   
+    passport.authenticate("user-local", { session: false }, async (err: any, user: any, info: any) => {
+
         try {
             if (err) {
-                return next(new appError(401, err));
+                console.log("-> Redirected to Error block");
+                return next(new appError(500, err.message || err));
             }
 
             if (!user) {
-                return next(new appError(401, info?.message || "Login failed"));
+                console.log("-> User validation failed. Message:", info?.message);
+                return utils.sendResponse(res, {
+                    statusCode: httpStatus.UNAUTHORIZED,
+                    message: info?.message || "Login failed",
+                    success: false,
+                    data: null
+                });
             }
+
+            console.log(user)
 
             const userTokens = await createUserToken(user);
             const { password: pass, ...rest } = user.toObject();
@@ -33,6 +44,7 @@ const credentialLogin = async (req: Request, res: Response, next: NextFunction) 
                 },
             });
         } catch (error) {
+            console.log("-> Caught error inside try-catch:", error);
             return next(error);
         }
     })(req, res, next);
@@ -46,7 +58,12 @@ const adminLogin = async (req: Request, res: Response, next: NextFunction) => {
             }
 
             if (!user) {
-                return next(new appError(401, info?.message || "Login failed"));
+                return utils.sendResponse(res, {
+                    statusCode: httpStatus.UNAUTHORIZED,
+                    message: info?.message || "Login failed",
+                    success: false,
+                    data: null
+                });
             }
 
             // if (user.isApproved === false) {

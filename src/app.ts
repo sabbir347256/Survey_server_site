@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import httpStatus from "http-status-codes";
 import { router } from "./routes/index";
-
+import './config/passport';
 
 const app = express();
 

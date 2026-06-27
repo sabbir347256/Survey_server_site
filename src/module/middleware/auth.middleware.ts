@@ -26,11 +26,12 @@ export const checkAuth =
           envVars.JWT_ACCESS_SECRET,
         ) as JwtPayload;
 
+
         if (!verifyUser) {
           throw new appError(httpStatus.UNAUTHORIZED, "Invalid token!");
         }
 
-        const isUser = await userModel.findById(verifyUser?.userId);
+        const isUser = await userModel.findById(verifyUser?.userID);
         if (!isUser) {
           throw new appError(httpStatus.UNAUTHORIZED, "No user found!");
         }
