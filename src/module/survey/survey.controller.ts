@@ -41,16 +41,49 @@ const getAllSurveys = async (req: Request, res: Response) => {
     }
 };
 
+// const handleLootwallsCallback = async (req: Request, res: Response) => {
+//     try {
+//         const { userId, amount } = req.query;
+
+//         if (envVars?.LOOTWALLS_API_SECRET) {
+//             return res.status(401).json({
+//                 success: false,
+//                 message: "Unauthorized"
+//             });
+//         }
+
+//         if (!userId || !amount) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Bad Request"
+//             });
+//         }
+
+//         const updatedUser = await userModel.findByIdAndUpdate(
+//             userId,
+//             { $inc: { balance: Number(amount) } },
+//             { new: true }
+//         );
+
+//         if (!updatedUser) {
+//             return res.status(404).json({ success: false, message: "User not found" });
+//         }
+
+//         return res.status(200).json({
+//             success: true,
+//             message: "Success"
+//         });
+
+//     } catch (error) {
+//         return res.status(500).json({ success: false, message: "Error" });
+//     }
+// };
+
 const handleLootwallsCallback = async (req: Request, res: Response) => {
     try {
         const { userId, amount } = req.query;
 
-        if (envVars?.LOOTWALLS_API_SECRET) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized"
-            });
-        }
+        console.log("Lootwalls Callback received! Query Data:", req.query);
 
         if (!userId || !amount) {
             return res.status(400).json({
