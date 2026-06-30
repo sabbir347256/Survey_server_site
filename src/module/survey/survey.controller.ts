@@ -41,11 +41,11 @@ const getAllSurveys = async (req: Request, res: Response) => {
     }
 };
 
-const handleLootwallsCallback = async (req:Request, res:Response) => {
+const handleLootwallsCallback = async (req: Request, res: Response) => {
     try {
-        const { userId, amount, apiSecret } = req.body;
+        const { userId, amount } = req.query;
 
-        if (apiSecret !== envVars?.LOOTWALLS_API_SECRET) {
+        if (envVars?.LOOTWALLS_API_SECRET) {
             return res.status(401).json({
                 success: false,
                 message: "Unauthorized"

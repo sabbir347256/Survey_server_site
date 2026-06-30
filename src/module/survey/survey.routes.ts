@@ -9,6 +9,6 @@ import geoBlockMiddleware from "../middleware/geoblock.midleware";
 const router = Router();
 
 router.get('/get-all-surveys',geoBlockMiddleware,checkAuth(Role.EMPLOYEE), surveyController.getAllSurveys );
-router.post('/lootwalls', surveyController.handleLootwallsCallback);
+router.get('/lootwalls', surveyController.handleLootwallsCallback);
 
 export const SurveyRouter = router;
