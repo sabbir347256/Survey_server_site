@@ -14,6 +14,8 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "https://survey-client-site.vercel.app",
+      "https://api.webearners.app",
+      "https://www.api.webearners.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
