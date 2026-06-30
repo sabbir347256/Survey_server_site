@@ -12,7 +12,7 @@ const getAllSurveys = async (req: Request, res: Response) => {
                 id: "lootwalls",
                 name: "Lootwalls",
                 description: "Share your opinions on simple topics and instantly stack points.",
-                url: `https://www.lootwalls.com/wall?apiKey=${envVars?.PROVIDER_LOOTWALLS_KEY}&userId=${userId}`
+                url: `https://www.lootwalls.com/wall?apiKey=${envVars?.PROVIDER_LOOTWALLS_KEY}&uid=${userId}`
             },
             // {
             //     id: "offertoro",
