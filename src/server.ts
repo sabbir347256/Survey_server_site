@@ -18,7 +18,7 @@ const startServer = async () => {
         await mongoose.connect(dbUrl);
         console.log("Database connected successfully");
 
-        httpServer.listen(port, () => {
+        httpServer.listen(port, '0.0.0.0', () => {
             console.log(`Server running on port : ${port}`);
         });
     } catch (error) {
