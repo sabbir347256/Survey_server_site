@@ -7,7 +7,6 @@ import statusCodes from "http-status-codes";
 import appError from "../../errorHelper/appError";
 
 const createEmployee = async (req: Request, res: Response) => {
-    console.log('adf')
     try {
         const { name, email, password, role } = req.body;
 

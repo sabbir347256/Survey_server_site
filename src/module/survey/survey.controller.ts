@@ -5,7 +5,6 @@ import { userModel } from "../user/user.model";
 const getAllSurveys = async (req: Request, res: Response) => {
     try {
         const user = req.user as { userID: string };
-        console.log(user)
         const userId = user.userID;
 
         const surveyProviders = [
@@ -46,7 +45,7 @@ const handleLootwallsCallback = async (req:Request, res:Response) => {
     try {
         const { userId, amount, apiSecret } = req.body;
 
-        if (apiSecret !== process.env.LOOTWALLS_API_SECRET) {
+        if (apiSecret !== envVars?.LOOTWALLS_API_SECRET) {
             return res.status(401).json({
                 success: false,
                 message: "Unauthorized"

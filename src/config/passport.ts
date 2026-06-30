@@ -50,7 +50,6 @@ passport.use(
       passwordField: "password",
     },
     async (email, password, done) => {
-      console.log(email)
       try {
         const isUserExists = await userModel.findOne({ email });
 

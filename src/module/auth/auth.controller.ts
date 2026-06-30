@@ -26,7 +26,6 @@ const credentialLogin = async (req: Request, res: Response, next: NextFunction) 
                 });
             }
 
-            console.log(user)
 
             const userTokens = await createUserToken(user);
             const { password: pass, ...rest } = user.toObject();

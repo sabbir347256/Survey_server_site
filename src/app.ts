@@ -16,6 +16,8 @@ app.use(
       "https://survey-client-site.vercel.app",
       "https://api.webearners.app",
       "https://www.api.webearners.app",
+      "https://survey.webearners.app",
+      "https://www.survey.webearners.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
