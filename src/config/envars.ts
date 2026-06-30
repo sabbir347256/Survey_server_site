@@ -12,6 +12,8 @@ const envVars = {
   JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES as string,
   PROVIDER_LOOTWALLS_KEY: process.env.PROVIDER_LOOTWALLS_KEY as string,
   LOOTWALLS_API_SECRET: process.env.LOOTWALLS_API_SECRET as string,
+  ZAMP_STAGING_KEY: process.env.ZAMP_STAGING_KEY as string,
+  ZAMP_EXIT_HMAC_KEY: process.env.ZAMP_EXIT_HMAC_KEY as string,
 };
 
 export = envVars;

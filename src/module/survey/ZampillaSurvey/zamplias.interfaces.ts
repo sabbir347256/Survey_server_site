@@ -1,20 +1,26 @@
 export interface ISurvey {
-  _id?: string;
-  surveyId: string;
-  name: string;
-  cpi: number;
-  loi: number;
-  isActive: boolean;
+    surveyId: string;
+    name: string;
+    cpi: number;
+    loi: number;
+    isActive: boolean;
 }
 
-export interface IStartSurveyPayload {
-  surveyId: string;
-  employeeId: string;
+export interface ITransaction {
+    transactionId: string;
+    employeeId: string;
+    surveyId: string;
+    status: 'INITIATED' | 'COMPLETE' | 'TERMINATE' | 'SCREENOUT';
+    rewardAmount: number;
 }
 
-export interface IApiResponse<T> {
-  success: boolean;
-  surveys?: T;
-  entryLink?: string;
-  error?: string;
+export interface IZampliaSurvey {
+    SurveyId: string;
+    CPI: number;
+    LOI: number;
+}
+
+export interface IZampliaResponse {
+    success: boolean;
+    result: IZampliaSurvey[] | { Link?: string } | any;
 }

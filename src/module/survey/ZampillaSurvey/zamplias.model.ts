@@ -1,14 +1,7 @@
-const mongoose = require('mongoose');
+import { model, Schema } from "mongoose";
+import { ITransaction } from "./zamplias.interfaces";
 
-const SurveySchema = new mongoose.Schema({
-  surveyId: { type: String, required: true, unique: true },
-  name: { type: String, default: 'Zamplia Survey' },
-  cpi: { type: Number, required: true },
-  loi: { type: Number, default: 10 },
-  isActive: { type: Boolean, default: true }
-}, { timestamps: true });
-
-const TransactionSchema = new mongoose.Schema({
+const TransactionSchema = new Schema<ITransaction>({
   transactionId: { type: String, required: true, unique: true },
   employeeId: { type: String, required: true },
   surveyId: { type: String, required: true },
@@ -16,7 +9,4 @@ const TransactionSchema = new mongoose.Schema({
   rewardAmount: { type: Number, default: 0 }
 }, { timestamps: true });
 
-const Survey = mongoose.model('Survey', SurveySchema);
-const Transaction = mongoose.model('Transaction', TransactionSchema);
-
-module.exports = { Survey, Transaction };
+export const Transaction = model<ITransaction>('Transaction', TransactionSchema);
