@@ -13,17 +13,16 @@ const getAllSurveys = async (req: Request, res: Response) => {
                 name: "Lootwalls",
                 description: "Share your opinions on simple topics and instantly stack points.",
                 url: `https://www.lootwalls.com/wall?apiKey=${envVars?.PROVIDER_LOOTWALLS_KEY}&userId=${userId}`
-            },
-           
+            }
         ];
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             providers: surveyProviders
         });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Server Error"
         });
@@ -32,19 +31,19 @@ const getAllSurveys = async (req: Request, res: Response) => {
 
 const handleLootwallsCallback = async (req: Request, res: Response) => {
     try {
-        const { userId, amount } = req.query;
+        const { userId, amount, secret } = req.query;
 
-        if (envVars?.LOOTWALLS_API_SECRET) {
+        if (secret !== envVars?.LOOTWALLS_API_SECRET) {
             return res.status(401).json({
                 success: false,
-                message: "Unauthorized"
+                message: "Unauthorized: Invalid Secret Key"
             });
         }
 
         if (!userId || !amount) {
             return res.status(400).json({
                 success: false,
-                message: "Bad Request"
+                message: "Bad Request: Missing parameters"
             });
         }
 
@@ -58,13 +57,10 @@ const handleLootwallsCallback = async (req: Request, res: Response) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        return res.status(200).json({
-            success: true,
-            message: "Success"
-        });
+        return res.status(200).send("1");
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Error" });
+        return res.status(500).send("Error");
     }
 };
 
