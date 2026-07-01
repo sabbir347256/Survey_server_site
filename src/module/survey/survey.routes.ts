@@ -7,7 +7,7 @@ import geoBlockMiddleware from "../middleware/geoblock.midleware";
 
 const router = Router();
 
-router.get('/get-all-surveys',geoBlockMiddleware,checkAuth(Role.EMPLOYEE), surveyController.getAllSurveys );
+router.get('/get-all-surveys',checkAuth(Role.EMPLOYEE), surveyController.getAllSurveys );
 router.get('/lootwalls', surveyController.handleLootwallsCallback);
 
 export const SurveyRouter = router;
