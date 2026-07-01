@@ -76,6 +76,8 @@ export const handleExitCallback = async (req: Request, res: Response): Promise<v
         const message = `transactionId=${transactionId}&status=${status}`;
         const generatedHash = crypto.createHmac('sha256', EXIT_HMAC_KEY).update(message).digest('hex');
 
+        console.log(generatedHash)
+
         if (generatedHash !== secure) {
             res.status(403).send('Invalid Secure Hash');
             return;
