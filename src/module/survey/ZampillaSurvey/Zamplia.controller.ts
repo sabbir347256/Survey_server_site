@@ -30,14 +30,8 @@ export const syncSurveys = async (req: Request, res: Response) => {
 export const startSurvey = async (req: Request, res: Response): Promise<void> => {
     try {
         const { surveyId, employeeId } = req.body;
-        console.log(surveyId)
-        console.log(employeeId)
         const transactionId = crypto.randomBytes(16).toString('hex');
-
-        let ipAddress = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
-        if (ipAddress.includes(',')) {
-            ipAddress = ipAddress.split(',')[0].trim();
-        }
+        const ipAddress = (req as any).ipAddress || '127.0.0.1';
 
         const response = await axios.get(`${BASE_URL}/Surveys/GenerateLink`, {
             headers: {
@@ -55,14 +49,21 @@ export const startSurvey = async (req: Request, res: Response): Promise<void> =>
         let link = '';
 
         if (resultData) {
-            link = resultData?.data[0]?.LiveLink;
+            if (typeof resultData === 'string') {
+                link = resultData;
+            } else if (resultData.Link) {
+                link = resultData.Link;
+            } else if (resultData.link) {
+                link = resultData.link;
+            } else if (Array.isArray(resultData) && resultData[0]) {
+                link = resultData[0].Link || resultData[0].link || (typeof resultData[0] === 'string' ? resultData[0] : '');
+            }
         }
 
         if (!link || typeof link !== 'string' || !link.startsWith('http')) {
             res.status(400).json({
                 success: false,
-                error: 'Invalid or missing entry link from Zamplia API',
-                debugData: resultData
+                error: 'Invalid or missing entry link from Zamplia API'
             });
             return;
         }

@@ -19,13 +19,16 @@ const geoBlockMiddleware = (req: Request, res: Response, next: NextFunction) => 
 
     console.log(`[GeoBlock] Incoming IP: ${ip}`);
 
+    (req as any).ipAddress = ip;
+
     if (ip === '127.0.0.1' || ip === '::1') {
         console.log("[GeoBlock] Allowed because it is Localhost");
+        (req as any).ipAddress = '104.244.42.1'; 
         return next();
     }
 
     const geo = geoip.lookup(ip);
-    console.log(`[GeoBlock] Geo Lookup Result:`, geo); // Dekhben desh 'BD' naki blank astese
+    console.log(`[GeoBlock] Geo Lookup Result:`, geo);
 
     const allowedCountries = ['US', 'GB'];
 
