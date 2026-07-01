@@ -72,28 +72,19 @@ export const startSurvey = async (req: Request, res: Response): Promise<void> =>
 
 export const handleExitCallback = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { transactionId, status, secure } = req.query as { transactionId: string; status: string; secure: string };
-        const message = `transactionId=${transactionId}&status=${status}`;
-        const generatedHash = crypto.createHmac('sha256', EXIT_HMAC_KEY).update(message).digest('hex');
-
-        console.log(generatedHash)
-
-        if (generatedHash !== secure) {
-            res.status(403).send('Invalid Secure Hash');
-            return;
-        }
+        const { transactionId, status } = req.query as { transactionId: string; status: string };
 
         const tx = await Transaction.findOne({ transactionId });
         if (!tx) {
-            res.status(404).send('Transaction Not Found');
+            res.redirect('https://survey.webearners.app/dashboard?error=not_found');
             return;
         }
 
         tx.status = status.toUpperCase() as any;
         await tx.save();
 
-        res.send('Callback Processed Successfully');
+        res.redirect(`https://survey.webearners.app/dashboard?status=${status}`);
     } catch (error: any) {
-        res.status(500).send('Internal Server Error');
+        res.redirect('https://survey.webearners.app/dashboard?error=server_error');
     }
 };
