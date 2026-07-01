@@ -46,8 +46,8 @@ export const startSurvey = async (req: Request, res: Response): Promise<void> =>
         const resultData = response.data.result;
         let link = '';
 
-        if (resultData) {
-            link = resultData?.data[0]?.LiveLink;
+        if (resultData && resultData.data && resultData.data[0]) {
+            link = resultData.data[0].LiveLink || '';
         }
 
         if (!link || typeof link !== 'string' || !link.startsWith('http')) {
@@ -56,6 +56,10 @@ export const startSurvey = async (req: Request, res: Response): Promise<void> =>
                 error: 'Invalid or missing entry link from Zamplia API'
             });
             return;
+        }
+
+        if (!link.includes('transactionId')) {
+            link = `${link}&transactionId=${transactionId}`;
         }
 
         await Transaction.create({ transactionId, employeeId, surveyId });
