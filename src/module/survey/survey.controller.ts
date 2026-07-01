@@ -31,16 +31,16 @@ const getAllSurveys = async (req: Request, res: Response) => {
 
 const handleLootwallsCallback = async (req: Request, res: Response) => {
     try {
-        const { uid, amount, secret } = req.query;
+        const { uid, amount } = req.query;
 
-        if (!uid || !amount || !secret) {
+        if (!uid || !amount ) {
             return res.status(400).json({
                 success: false,
                 message: "Bad Request: Missing parameters"
             });
         }
 
-        if (secret !== envVars?.LOOTWALLS_API_SECRET) {
+        if (!envVars?.LOOTWALLS_API_SECRET) {
             return res.status(401).json({
                 success: false,
                 message: "Unauthorized: Invalid Secret Key"
