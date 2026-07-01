@@ -2,6 +2,7 @@ import { Router } from "express";
 import { userRoutes } from "../module/user/user.routes";
 import { AuthRouter } from "../module/auth/auth.routes";
 import { SurveyRouter } from "../module/survey/survey.routes";
+import { zampilaroute } from "../module/survey/ZampillaSurvey/zamplia.routes";
 
 export const router = Router();
 
@@ -18,10 +19,10 @@ const moduleRoutes = [
         path: "/survey",
         router: SurveyRouter,
     },
-    // {
-    //     path: "/zampila",
-    //     router: zampilaroute,
-    // },
+    {
+        path: "/zampila",
+        router: zampilaroute,
+    },
 
 ];
 

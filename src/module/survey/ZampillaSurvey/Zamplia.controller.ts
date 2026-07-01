@@ -1,45 +1,79 @@
-// import { Request, Response } from 'express';
-// import { IZampliaResponse } from './zamplias.interfaces';
-// import { Survey, Transaction } from './zamplias.model';
-// import axios from 'axios';
-// import CryptoJS from 'crypto-js';
-// import envVars from '../../../config/envars';
+import { Request, Response } from 'express';
+import { IZampliaResponse } from './zamplias.interfaces';
+import { Transaction } from './zamplias.model';
+import axios from 'axios';
+import crypto from 'crypto';
+import envVars from '../../../config/envars';
 
-// const ZAMP_KEY = envVars.ZAMP_STAGING_KEY as string;
-// const EXIT_HMAC_KEY = envVars.ZAMP_EXIT_HMAC_KEY as string;
-// const BASE_URL = 'https://surveysupplysandbox.zamplia.com/api/v1';
+const ZAMP_KEY = envVars.ZAMP_STAGING_KEY as string;
+const EXIT_HMAC_KEY = envVars.ZAMP_EXIT_HMAC_KEY as string;
+// const BASE_URL = 'https://zamplia.zamplia.com/api/v1';
+const BASE_URL = ' https://surveysupplysandbox.zamplia.com/api/v1';
 
-// export const syncSurveys = async (req: Request, res: Response): Promise<void> => {
-//     try {
-//         const response = await axios.get(`${BASE_URL}/Surveys/GetAllocatedSurveys`, {
-//             headers: { 'Accept': 'application/json', 'ZAMP-KEY': ZAMP_KEY }
-//         });
-//         const surveys = response.data.result || [];
-//         res.json({ success: true, surveys });
-//     } catch (error: any) {
-//         res.status(500).json({ success: false, error: error.message });
-//     }
-// };
+export const syncSurveys = async (req: Request, res: Response) => {
+    try {
+        const token = req.headers.authorization;
+        const response = await axios.get(`${BASE_URL}/Surveys/GetAllocatedSurveys`, {
+            headers: {
+                'Accept': 'application/json',
+                'ZAMP-KEY': ZAMP_KEY,
+                'Authorization': token
+            }
+        });
+        const surveys = response.data.result || [];
+        res.json({ success: true, surveys });
+    } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
 
-// export const startSurvey = async (req: Request, res: Response): Promise<void> => {
-//     try {
-//         const { surveyId, employeeId } = req.body;
-//         const transactionId = CryptoJS.randomBytes(16).toString('hex');
-//         const ipAddress = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
+export const startSurvey = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { surveyId, employeeId } = req.body;
+        console.log(surveyId)
+        console.log(employeeId)
+        const transactionId = crypto.randomBytes(16).toString('hex');
 
-//         const response = await axios.get(`${BASE_URL}/Surveys/GenerateLink`, {
-//             headers: { 'Accept': 'application/json', 'ZAMP-KEY': ZAMP_KEY },
-//             params: { SurveyId: surveyId, IpAddress: ipAddress, TransactionId: transactionId }
-//         });
+        let ipAddress = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
+        if (ipAddress.includes(',')) {
+            ipAddress = ipAddress.split(',')[0].trim();
+        }
 
-//         await Transaction.create({ transactionId, employeeId, surveyId });
+        const response = await axios.get(`${BASE_URL}/Surveys/GenerateLink`, {
+            headers: {
+                'Accept': 'application/json',
+                'ZAMP-KEY': ZAMP_KEY
+            },
+            params: {
+                SurveyId: surveyId,
+                IpAddress: ipAddress,
+                TransactionId: transactionId
+            }
+        });
 
-//         const link = response.data.result.Link || response.data.result;
-//         res.json({ success: true, entryLink: link });
-//     } catch (error: any) {
-//         res.status(500).json({ success: false, error: error.message });
-//     }
-// };
+        const resultData = response.data.result;
+        let link = '';
+
+        if (resultData) {
+            link = resultData?.data[0]?.LiveLink;
+        }
+
+        if (!link || typeof link !== 'string' || !link.startsWith('http')) {
+            res.status(400).json({
+                success: false,
+                error: 'Invalid or missing entry link from Zamplia API',
+                debugData: resultData
+            });
+            return;
+        }
+
+        await Transaction.create({ transactionId, employeeId, surveyId });
+
+        res.json({ success: true, entryLink: link });
+    } catch (error: any) {
+        res.status(500).json({ success: false, error: error.response?.data?.message || error.message });
+    }
+};
 
 // export const handleExitCallback = async (req: Request, res: Response): Promise<any> => {
 //     try {
