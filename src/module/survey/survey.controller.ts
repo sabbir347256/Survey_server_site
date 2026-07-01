@@ -31,7 +31,11 @@ const getAllSurveys = async (req: Request, res: Response) => {
 
 const handleLootwallsCallback = async (req: Request, res: Response) => {
     try {
-        const { uid, amount } = req.query;
+        const { uid, amount } = req.body;
+        console.log(uid)
+        console.log(amount)
+
+
 
         if (!uid || !amount ) {
             return res.status(400).json({
