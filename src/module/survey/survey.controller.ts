@@ -31,7 +31,14 @@ const getAllSurveys = async (req: Request, res: Response) => {
 
 const handleLootwallsCallback = async (req: Request, res: Response) => {
     try {
-        const { userId, amount, secret } = req.query;
+        const { uid, amount, secret } = req.query;
+
+        if (!uid || !amount || !secret) {
+            return res.status(400).json({
+                success: false,
+                message: "Bad Request: Missing parameters"
+            });
+        }
 
         if (secret !== envVars?.LOOTWALLS_API_SECRET) {
             return res.status(401).json({
@@ -40,15 +47,8 @@ const handleLootwallsCallback = async (req: Request, res: Response) => {
             });
         }
 
-        if (!userId || !amount) {
-            return res.status(400).json({
-                success: false,
-                message: "Bad Request: Missing parameters"
-            });
-        }
-
         const updatedUser = await userModel.findByIdAndUpdate(
-            userId,
+            uid,
             { $inc: { balance: Number(amount) } },
             { new: true }
         );
