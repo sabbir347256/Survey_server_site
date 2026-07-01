@@ -30,31 +30,23 @@ const getAllSurveys = async (req: Request, res: Response) => {
 };
 
 const handleLootwallsCallback = async (req: Request, res: Response) => {
+    console.log('hit khaiche')
     try {
-        const { uid, amount } = req.body;
+        const { uid, amount } = req.query;
         console.log(uid)
         console.log(amount)
 
-
-
-        if (!uid || !amount ) {
+        if (!uid || !amount) {
             return res.status(400).json({
                 success: false,
                 message: "Bad Request: Missing parameters"
             });
         }
 
-        if (!envVars?.LOOTWALLS_API_SECRET) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized: Invalid Secret Key"
-            });
-        }
-
         const updatedUser = await userModel.findByIdAndUpdate(
             uid,
             { $inc: { balance: Number(amount) } },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!updatedUser) {
