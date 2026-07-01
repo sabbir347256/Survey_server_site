@@ -49,15 +49,7 @@ export const startSurvey = async (req: Request, res: Response): Promise<void> =>
         let link = '';
 
         if (resultData) {
-            if (typeof resultData === 'string') {
-                link = resultData;
-            } else if (resultData.Link) {
-                link = resultData.Link;
-            } else if (resultData.link) {
-                link = resultData.link;
-            } else if (Array.isArray(resultData) && resultData[0]) {
-                link = resultData[0].Link || resultData[0].link || (typeof resultData[0] === 'string' ? resultData[0] : '');
-            }
+            link = resultData?.data[0]?.LiveLink
         }
 
         if (!link || typeof link !== 'string' || !link.startsWith('http')) {
